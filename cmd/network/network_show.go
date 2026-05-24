@@ -3,6 +3,7 @@ package network
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/civo/cli/common"
 	"github.com/civo/cli/config"
@@ -39,11 +40,13 @@ var networkShowCmd = &cobra.Command{
 		ow.AppendDataWithLabel("status", network.Status, "Status")
 		ow.AppendDataWithLabel("ipv4_enabled", utility.BoolToYesNo(network.IPv4Enabled), "IPv4 Enabled")
 		ow.AppendDataWithLabel("ipv6_enabled", utility.BoolToYesNo(network.IPv6Enabled), "IPv6 Enabled")
-		ow.AppendDataWithLabel("vlan_id", fmt.Sprintf("%d", network.VlanID), "VLAN ID")
-		ow.AppendDataWithLabel("physical_interface", network.PhysicalInterface, "Hardware Address")
 		ow.AppendDataWithLabel("gateway_ipv4", network.GatewayIPv4, "Gateway IPv4")
-		ow.AppendDataWithLabel("allocation_pool_v4_start", network.AllocationPoolV4Start, "Allocation Pool IPv4 Start")
-		ow.AppendDataWithLabel("allocation_pool_v4_end", network.AllocationPoolV4End, "Allocation Pool IPv4 End")
+		if network.VlanID != 0 {
+			ow.AppendDataWithLabel("vlan_id", strconv.Itoa(network.VlanID), "VLAN ID")
+			ow.AppendDataWithLabel("physical_interface", network.PhysicalInterface, "Hardware Address")
+			ow.AppendDataWithLabel("allocation_pool_v4_start", network.AllocationPoolV4Start, "Allocation Pool IPv4 Start")
+			ow.AppendDataWithLabel("allocation_pool_v4_end", network.AllocationPoolV4End, "Allocation Pool IPv4 End")
+		}
 		ow.AppendDataWithLabel("nameservers_v4", utility.SliceToString(network.NameserversV4), "Nameservers IPv4")
 		ow.AppendDataWithLabel("nameservers_v6", utility.SliceToString(network.NameserversV6), "Nameservers IPv6")
 
@@ -61,12 +64,12 @@ var networkShowCmd = &cobra.Command{
 			fmt.Printf("Status: %s\n", network.Status)
 			fmt.Printf("IPv4 Enabled: %s\n", utility.BoolToYesNo(network.IPv4Enabled))
 			fmt.Printf("IPv6 Enabled: %s\n", utility.BoolToYesNo(network.IPv6Enabled))
+			fmt.Printf("Gateway IPv4: %s\n", network.GatewayIPv4)
 
 			if network.VlanID != 0 {
 				fmt.Println("\nVLAN Details:")
 				fmt.Printf("VLAN ID: %d\n", network.VlanID)
 				fmt.Printf("Hardware Address: %s\n", network.PhysicalInterface)
-				fmt.Printf("Gateway IPv4: %s\n", network.GatewayIPv4)
 				fmt.Printf("Allocation Pool IPv4 Start: %s\n", network.AllocationPoolV4Start)
 				fmt.Printf("Allocation Pool IPv4 End: %s\n", network.AllocationPoolV4End)
 			} else {

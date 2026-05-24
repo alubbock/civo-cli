@@ -74,9 +74,9 @@ Example:
 			ow.WriteCustomOutput(common.OutputFields)
 		default:
 			if args[0] == "enable" {
-				fmt.Printf("Recovery mode has been enabled for instance %s\n", utility.Green(instance.Hostname))
+				fmt.Printf("Recovery mode has been enabled for instance %s (%s)\n", utility.Green(instance.Hostname), instance.ID)
 			} else {
-				fmt.Printf("Recovery mode has been disabled for instance %s\n", utility.Green(instance.Hostname))
+				fmt.Printf("Recovery mode has been disabled for instance %s (%s)\n", utility.Green(instance.Hostname), instance.ID)
 			}
 		}
 	},
